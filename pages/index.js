@@ -8,7 +8,7 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(`https://p-check.vercel.app/check?startBlock=${startBlock}&endBlock=${endBlock}`);
+    const response = await fetch(`https://api.etherscan.io/api?module=account&action=txlist&address=0xBd3531dA5CF5857e7CfAA92426877b022e612cf8e&startblock=${startBlock}&endblock=${endBlock}&sort=asc&apikey=WNMWVDQVHGYXK76CSGMAI18JX3JUUSVS5G`);
     const data = await response.json();
 
     setTransfers(data.transfers);
