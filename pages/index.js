@@ -15,7 +15,7 @@ const Home = () => {
     const contract = new web3.eth.Contract(abi, contractAddress);
 
     // Fetch balance for the specified address
-    const balance = await contract.methods.balanceOf("0xbd3531da5cf5857e7cfaa92426877b022e612cf8e").call();
+    const balance = await contract.methods.balanceOf("contractAddress").call();
 
     setTransfers({ [contractAddress]: balance });
   };
