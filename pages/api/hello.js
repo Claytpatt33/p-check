@@ -29,10 +29,12 @@ export default async (req, res) => {
   }
   print(console.log())
   // Return the results in a JSON object
-  res.json({
-    transfers,
-    startBlock,
-    endBlock,
-    success: true
-  });
+  const responseData = {
+  transfers: transfers,
+  startBlock: startBlock,
+  endBlock: endBlock,
+  success: true
+};
+
+res.json(responseData);
 };
