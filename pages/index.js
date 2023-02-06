@@ -8,7 +8,7 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(`/check?startBlock=${startBlock}&endBlock=${endBlock}`);
+    const response = await fetch(`https://p-check.vercel.app/check?startBlock=${startBlock}&endBlock=${endBlock}`);
     const data = await response.json();
 
     setTransfers(data.transfers);
