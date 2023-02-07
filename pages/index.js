@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Web3 from 'web3';
-const { ethers } = require("ethers");
 
 const Home = () => {
   const [startBlock, setStartBlock] = useState('');
@@ -12,17 +11,12 @@ const Home = () => {
   'Content-Type': 'application/json',
 };
 
-const provider = new ethers.providers.InfuraProvider.getWebSocketProvider(
-  "mainnet",
-  "b41746a63ed848c683d56bf98c5e5212"
-);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const response = await fetch(provider.url + "/v3/b41746a63ed848c683d56bf98c5e5212");
+      const response = await fetch("https://mainnet.infura.io/v3/b41746a63ed848c683d56bf98c5e5212");
       
       console.log(response);
       const data = await response.json();
@@ -61,4 +55,3 @@ const provider = new ethers.providers.InfuraProvider.getWebSocketProvider(
 };
 
 export default Home;
-
