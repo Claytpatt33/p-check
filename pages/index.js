@@ -14,6 +14,9 @@ const Home = () => {
 
     try {
       const response = await fetch(`/api/getTransfers?startBlock=${startBlock}&endBlock=${endBlock}`);
+      headers: {
+    'Content-Type': 'application/json',
+  },
       console.log(response);
       const data = await response.json();
       setTransfers(data.transfers);
