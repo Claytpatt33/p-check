@@ -7,6 +7,9 @@ const Home = () => {
   const [transfers, setTransfers] = useState({});
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const headers = {
+  'Content-Type': 'application/json',
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,9 +17,7 @@ const Home = () => {
 
     try {
       const response = await fetch(`/api/getTransfers?startBlock=${startBlock}&endBlock=${endBlock}`);
-      headers: {
-    'Content-Type': 'application/json',
-  },
+      
       console.log(response);
       const data = await response.json();
       setTransfers(data.transfers);
