@@ -16,7 +16,7 @@ const Home = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/api/getTransfers?startBlock=${startBlock}&endBlock=${endBlock}`);
+      const response = await fetch(`/api/getTransfers?startBlock=${startBlock}&endBlock=${endBlock}`,{ headers });
       
       console.log(response);
       const data = await response.json();
