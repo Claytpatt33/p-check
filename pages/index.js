@@ -1,49 +1,57 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.0.3/dist/ethers.min.js"></script>
-  </head>
-  <body>
-    <form>
+import React, { useState } from 'react';
+import Web3 from 'web3';
+
+const Home = () => {
+  const [startBlock, setStartBlock] = useState('');
+  const [endBlock, setEndBlock] = useState('');
+  const [transfers, setTransfers] = useState({});
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const headers = {
+  'Content-Type': 'application/json',
+};
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("https://mainnet.infura.io/v3/b41746a63ed848c683d56bf98c5e5212");
+      
+      console.log(response);
+      const data = await response.json();
+      console.log(data)
+      setTransfers(data.transfers);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <div>
-        <label>Start Block Number:</label>
-        <input type="text" id="startBlock" required />
+        <div style={{ textAlign: 'center' }}>Pudgy Penguins Transfer Checker</div>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <input type="text" value={startBlock} onChange={e => setStartBlock(e.target.value)} />
+          <input type="text" value={endBlock} onChange={e => setEndBlock(e.target.value)} />
+          <button type="submit">Submit</button>
+        </form>
+        {error && <div>Error: {error.message}</div>}
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          Object.keys(transfers).map(address => (
+            <div key={address}>
+              Address: {address}
+              Number of Transfers: {transfers[address]}
+            </div>
+          ))
+        )}
       </div>
-      <div>
-        <label>End Block Number:</label>
-        <input type="text" id="endBlock" required />
-      </div>
-      <button type="submit">Submit</button>
-    </form>
-    <p id="output"></p>
+    </div>
+  );
+};
 
-    <script>
-      const { ethers } = require("ethers");
-      const provider = new ethers.providers.InfuraProvider(
-        "mainnet",
-        "b41746a63ed848c683d56bf98c5e5212"
-      );
-
-      async function getTransactionCountInBlockRange(startBlock, endBlock) {
-        let transactionCount = 0;
-        for (let blockNumber = startBlock; blockNumber <= endBlock; blockNumber++) {
-          const block = await provider.getBlock(blockNumber);
-          transactionCount += block.transactions.length;
-        }
-        return transactionCount;
-      }
-
-      const form = document.querySelector("form");
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const startBlock = parseInt(document.querySelector("#startBlock").value);
-        const endBlock = parseInt(document.querySelector("#endBlock").value);
-
-        const transactionCount = await getTransactionCountInBlockRange(startBlock, endBlock);
-
-        document.querySelector("#output").innerText = `Number of transactions in block range [${startBlock}, ${endBlock}]: ${transactionCount}`;
-      });
-    </script>
-  </body>
-</html>
+export default Home;
