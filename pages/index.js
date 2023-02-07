@@ -8,19 +8,26 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const headers = {
-  'Content-Type': 'application/json',
-};
+    'Content-Type': 'application/json',
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const response = await fetch("https://mainnet.infura.io/v3/b41746a63ed848c683d56bf98c5e5212");
+      const response = await fetch(
+        `https://mainnet.infura.io/v3/b41746a63ed848c683d56bf98c5e5212/pudgypenguins/transfers/${startBlock}/${endBlock}`,
+        {
+          headers: headers
+        }
+      );
       
-      console.log(response);
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      
       const data = await response.json();
-      console.log(data)
       setTransfers(data.transfers);
     } catch (err) {
       setError(err);
@@ -34,8 +41,8 @@ const Home = () => {
       <div>
         <div style={{ textAlign: 'center' }}>Pudgy Penguins Transfer Checker</div>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <input type="text" value={startBlock} onChange={e => setStartBlock(e.target.value)} />
-          <input type="text" value={endBlock} onChange={e => setEndBlock(e.target.value)} />
+          <input type="text" value={startBlock} onChange={e => setStartBlock(e.target.value)} placeholder="Start Block" />
+          <input type="text" value={endBlock} onChange={e => setEndBlock(e.target.value)} placeholder="End Block" />
           <button type="submit">Submit</button>
         </form>
         {error && <div>Error: {error.message}</div>}
