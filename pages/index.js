@@ -14,6 +14,7 @@ const Home = () => {
 
     try {
       const response = await fetch(`/api/getTransfers?startBlock=${startBlock}&endBlock=${endBlock}`);
+      console.log(response);
       const data = await response.json();
       setTransfers(data.transfers);
     } catch (err) {
