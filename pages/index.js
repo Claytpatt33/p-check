@@ -1,23 +1,49 @@
-const { ethers } = require("ethers");
-const provider = ethers.getDefaultProvider("mainnet", "b41746a63ed848c683d56bf98c5e5212");
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.0.3/dist/ethers.min.js"></script>
+  </head>
+  <body>
+    <form>
+      <div>
+        <label>Start Block Number:</label>
+        <input type="text" id="startBlock" required />
+      </div>
+      <div>
+        <label>End Block Number:</label>
+        <input type="text" id="endBlock" required />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <p id="output"></p>
 
-async function getTransactionCountInBlockRange(startBlock, endBlock) {
-  let transactionCount = 0;
-  for (let blockNumber = startBlock; blockNumber <= endBlock; blockNumber++) {
-    const block = await provider.getBlock(blockNumber);
-    transactionCount += block.transactions.length;
-  }
-  console.log(`Number of transactions in block range [${startBlock}, ${endBlock}]: ${transactionCount}`);
-}
+    <script>
+      const { ethers } = require("ethers");
+      const provider = new ethers.providers.InfuraProvider(
+        "mainnet",
+        "b41746a63ed848c683d56bf98c5e5212"
+      );
 
-const readline = require('readline').createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+      async function getTransactionCountInBlockRange(startBlock, endBlock) {
+        let transactionCount = 0;
+        for (let blockNumber = startBlock; blockNumber <= endBlock; blockNumber++) {
+          const block = await provider.getBlock(blockNumber);
+          transactionCount += block.transactions.length;
+        }
+        return transactionCount;
+      }
 
-readline.question("Enter the start block number: ", startBlock => {
-  readline.question("Enter the end block number: ", endBlock => {
-    getTransactionCountInBlockRange(parseInt(startBlock), parseInt(endBlock));
-    readline.close();
-  });
-});
+      const form = document.querySelector("form");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const startBlock = parseInt(document.querySelector("#startBlock").value);
+        const endBlock = parseInt(document.querySelector("#endBlock").value);
+
+        const transactionCount = await getTransactionCountInBlockRange(startBlock, endBlock);
+
+        document.querySelector("#output").innerText = `Number of transactions in block range [${startBlock}, ${endBlock}]: ${transactionCount}`;
+      });
+    </script>
+  </body>
+</html>
