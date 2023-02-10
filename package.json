@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@next/font": "13.1.6",
-    "ethers": "^6.0.2",
+    "ethers": "5.4",
     "git": "^0.1.5",
     "net": "^1.0.2",
     "next": "13.1.6",
