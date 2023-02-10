@@ -1,5 +1,16 @@
 const { ethers, AlchemyProvider } = require("ethers");
+exports.handler = (event, context, callback) => {
+  const response = {
+    statusCode: 200,
+    body: JSON.stringify({ message: "Hello, World!" }),
+  };
 
+  response.headers = {
+    "Access-Control-Allow-Origin": "https://p-check-oemfsgwqs-claytpatt33.vercel.app",
+  };
+
+  callback(null, response);
+};
 export default async (req, res) => {
   const { query: { startBlock, endBlock } } = req;
 
