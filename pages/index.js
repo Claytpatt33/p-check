@@ -16,7 +16,9 @@ const Home = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("https://mainnet.infura.io/v3/b41746a63ed848c683d56bf98c5e5212");
+      const response = await fetch("/api/hello?startBlock=" + startBlock + "&endBlock=" + endBlock, {
+    headers: headers
+  });
       
       console.log(response);
       const data = await response.json();
