@@ -16,7 +16,7 @@ const Home = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/hello?startBlock=" + startBlock + "&endBlock=" + endBlock, {
+      const response = await fetch("https://p-check.vercel.app/api/hello" + startBlock + "&endBlock=" + endBlock, {
     headers: headers
   });
       
