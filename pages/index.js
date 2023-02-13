@@ -14,7 +14,7 @@ const Home = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.get(`/api/hello&startBlock=${startBlock}&endBlock=${endBlock}`);
+      const response = await axios.get(`https://api.vercel.com/api/hello&startBlock=${startBlock}&endBlock=${endBlock}`);
       setTransfers(response.data.transfers);
     } catch (err) {
       setError(err);
