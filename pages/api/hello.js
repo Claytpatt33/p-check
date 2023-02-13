@@ -1,6 +1,7 @@
 const { ethers, AlchemyProvider } = require("ethers");
 const express = require("express");
 const cors = require("cors");
+import('next').NextConfig;
 
 const allowCors = fn => async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true)
