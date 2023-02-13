@@ -8,6 +8,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+module.exports = app;
 
 const contractAddress = "0xBd3531dA5CF5857e7CfAA92426877b022e612cf8";
 const provider = new AlchemyProvider("homestead", "iiDYJ0CAxQyqnDZqbtu7SvaX_hNzz6V5");
