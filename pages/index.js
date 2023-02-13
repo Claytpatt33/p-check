@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Web3 from 'web3';
 const express = require("express");
 const proxy = require("http-proxy-middleware");
+const fs = require('fs');
 
 const app = express();
 
