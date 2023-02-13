@@ -1,5 +1,22 @@
 import React, { useState } from 'react';
 import Web3 from 'web3';
+const express = require("express");
+const proxy = require("http-proxy-middleware");
+
+const app = express();
+
+app.use(
+"/api",
+proxy({
+target: "https://api.vercel.com",
+changeOrigin: true,
+headers: { "Access-Control-Allow-Origin": "*" }
+})
+);
+
+app.listen(3000, () => {
+console.log("Server running on port 3000");
+});
 
 const Home = () => {
   const [startBlock, setStartBlock] = useState('');
