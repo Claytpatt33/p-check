@@ -1,36 +1,9 @@
 const { ethers, AlchemyProvider } = require("ethers");
 const express = require("express");
 const cors = require("cors");
-import('next').NextConfig;
-
-const allowCors = fn => async (req, res) => {
-  if(req.method === 'OPTIONS') { return res.status(200).json(({ body: "OK" })) }
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  // another common pattern
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
-  if (req.method === 'OPTIONS') {
-    res.status(200).end()
-    return
-  }
-  return await fn(req, res)
-}
-const handler = (req, res) => {
-  const d = new Date()
-  res.end(d.toString())
-}
-
-module.exports = allowCors(handler)
 
 const app = express();
 app.use(cors());
-
 const provider = new AlchemyProvider("homestead", "iiDYJ0CAxQyqnDZqbtu7SvaX_hNzz6V5");
 
 const contractAddress = "0xBd3531dA5CF5857e7CfAA92426877b022e612cf8";
