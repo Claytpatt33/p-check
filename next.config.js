@@ -8,7 +8,7 @@ module.exports = {
     return [
       {
         // matching all API routes
-        source: "/api/hello.js*",
+        source: "/api/hello",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           { key: "Access-Control-Allow-Origin", value: "*" },
