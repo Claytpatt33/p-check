@@ -4,6 +4,7 @@ const cors = require("cors");
 import('next').NextConfig;
 
 const allowCors = fn => async (req, res) => {
+  if(req.method === 'OPTIONS') { return res.status(200).json(({ body: "OK" })) }
   res.setHeader('Access-Control-Allow-Credentials', true)
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Origin', '*')
