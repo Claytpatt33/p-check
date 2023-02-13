@@ -2,6 +2,19 @@ import React, { useState } from 'react';
 import Web3 from 'web3';
 import axios from 'axios';
 
+const proxy = require("http-proxy-middleware");
+
+const app = express();
+
+app.use(
+"/api",
+proxy({
+target: "https://api.vercel.com",
+changeOrigin: true,
+headers: { "Access-Control-Allow-Origin": "*" }
+})
+);
+
 const Home = () => {
   const [startBlock, setStartBlock] = useState('');
   const [endBlock, setEndBlock] = useState('');
