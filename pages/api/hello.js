@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
 const provider = new AlchemyProvider("homestead", "iiDYJ0CAxQyqnDZqbtu7SvaX_hNzz6V5");
 
 const contractAddress = "0xBd3531dA5CF5857e7CfAA92426877b022e612cf8";
@@ -42,8 +41,4 @@ app.get("/transfers/:startBlock/:endBlock", async (req, res) => {
     console.error(error);
     res.status(500).send(error);
   }
-});
-
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
 });
