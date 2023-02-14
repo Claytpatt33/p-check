@@ -39,7 +39,7 @@ async function getTransfers(startBlock, endBlock) {
   const logs = await provider.getLogs(transferEvent);
 
   const transfers = {};
-  logs.forEach(log => {
+  if (logs.length > 0){logs.forEach(log => {
     if (log.topics[0] === "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef") {
       const from = "0x" + log.topics[1].substr(26);
       const to = "0x" + log.topics[2].substr(26);
@@ -48,6 +48,7 @@ async function getTransfers(startBlock, endBlock) {
       transfers[to] = transfers[to] ? transfers[to] + 1 : 1;
     }
   });
+}
 
   return { transfers, startBlock, endBlock, success: true };
 }
