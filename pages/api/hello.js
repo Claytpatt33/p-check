@@ -53,7 +53,7 @@ async function getTransfers(startBlock, endBlock) {
   return { transfers, startBlock, endBlock, success: true };
 }
 
-app.get("/transfers/:startBlock/:endBlock", async (req, res) => {
+app.get("/transfers/${startBlock}/${endBlock}", async (req, res) => {
   const { startBlock, endBlock } = req.params;
 
   try {
