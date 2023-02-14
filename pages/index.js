@@ -1,55 +1,70 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+const { ethers, AlchemyProvider } = require("ethers");
+const allowCors = fn => async (req, res) => {
+  res.setHeader('Access-Control-Allow-Credentials', true)
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  // another common pattern
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  )
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
+    return
+  }
+  return await fn(req, res)
+}
 
-const Home = () => {
-  const [startBlock, setStartBlock] = useState('');
-  const [endBlock, setEndBlock] = useState('');
-  const [transfers, setTransfers] = useState({});
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
+const handler = (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  const d = new Date();
+  const response = {
+    date: d.toString()
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const response = await axios.get(` https://api.vercel.com/api/hello?startBlock=${startBlock}&endBlock=${endBlock}`, { headers });
-      setTransfers(response.data.transfers);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <div>
-        <div style={{ textAlign: 'center' }}>Pudgy Penguins Transfer Checker</div>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <input type="text" value={startBlock} onChange={e => setStartBlock(e.target.value)} />
-          <input type="text" value={endBlock} onChange={e => setEndBlock(e.target.value)} />
-          <button type="submit">Submit</button>
-        </form>
-        {error && <div>Error: {error.message}</div>}
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : (
-          Object.keys(transfers).map(address => (
-            <div key={address}>
-              Address: {address}
-              Number of Transfers: {transfers[address]}
-            </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
+  res.end(JSON.stringify(response));
 };
 
-export default Home;
+module.exports = allowCors(handler);
+
+const provider = new AlchemyProvider("homestead", "iiDYJ0CAxQyqnDZqbtu7SvaX_hNzz6V5");
+
+ABI = ABI;
+const contract = new ethers.Contract(contractAddress, ABI, provider);
+
+async function getTransfers(startBlock, endBlock) {
+  const transferEvent = contract.filters.Transfer(contractAddress);
+  transferEvent.fromBlock = startBlock;
+  transferEvent.toBlock = endBlock;
+
+  const logs = await provider.getLogs(transferEvent);
+
+  const transfers = {};
+  if (logs.length > 0){logs.forEach(log => {
+    if (log.topics[0] === "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef") {
+      const from = "0x" + log.topics[1].substr(26);
+      const to = "0x" + log.topics[2].substr(26);
+
+      transfers[from] = transfers[from] ? transfers[from] + 1 : 1;
+      transfers[to] = transfers[to] ? transfers[to] + 1 : 1;
+    }
+  });
+}
+
+  return { transfers, startBlock, endBlock, success: true };
+}
+
+app.get("/transfers/:startBlock/:endBlock", async (req, res) => {
+  const { startBlock, endBlock } = req.params;
+
+  try {
+    const result = await getTransfers(parseInt(startBlock), parseInt(endBlock));
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(res.status(500).json({
+      success: false,
+      error: error.toString()
+    });
+  }
+});
