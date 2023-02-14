@@ -67,4 +67,4 @@ app.get("/transfers/:startBlock/:endBlock", async (req, res) => {
       error: error.toString()
     });
   }
-});
+})
