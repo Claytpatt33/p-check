@@ -62,9 +62,7 @@ app.get("/transfers/:startBlock/:endBlock", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error(error);
-    res.status(res.status(500).json({
-      success: false,
-      error: error.toString()
-    });
-  }
-})
+    res.status(500).send({
+  success: false,
+  error: error.toString()
+});
