@@ -1,6 +1,23 @@
 import React, { useState } from 'react';
 import Web3 from 'web3';
 import axios from 'axios';
+const express = require("express");
+const proxy = require("http-proxy-middleware");
+
+const app = express();
+
+app.use(
+  "/api",
+  proxy({
+    target: "https://api.vercel.com",
+    changeOrigin: true,
+    headers: { "Access-Control-Allow-Origin": "*" }
+  })
+);
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
 
 const Home = () => {
 const [startBlock, setStartBlock] = useState('');
@@ -16,7 +33,7 @@ const headers = {
 
 const handleSubmit = async (e) => { e.preventDefault(); setIsLoading(true);
 try {
-  const response = await axios.get(`https://api.vercel.com/api/hello&startBlock=${startBlock}&endBlock=${endBlock}`, { headers });
+  const response = await axios.get(`http://localhost:3000/api/hello&startBlock=0&endBlock=1`, { headers });
   setTransfers(response.data.transfers);
 } catch (err) {
   setError(err);
