@@ -18,7 +18,7 @@ const Home = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.get(`/api/transfers/${startBlock}/${endBlock}`, { headers });
+      const response = await axios.get(`/api/?startBlock=${startBlock}&endBlock=${endBlock}`, { headers });
       setTransfers(response.data.transfers);
     } catch (err) {
       setError(err);
