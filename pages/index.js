@@ -30,7 +30,7 @@ const Home = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <div>
-        <div style={{ textAlign: 'center' }}>Pudgy Penguins Transfer Checker</div>
+        <div style={{ textAlign: 'center' }}>Transfer Checker</div>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <input type="text" value={startBlock} onChange={e => setStartBlock(e.target.value)} />
           <input type="text" value={endBlock} onChange={e => setEndBlock(e.target.value)} />
