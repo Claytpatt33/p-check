@@ -3,28 +3,34 @@ const express = require('express');
 const app = express();
 
 const allowCors = fn => async (req, res) => {
-res.setHeader('Access-Control-Allow-Credentials', true);
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-res.setHeader(
-'Access-Control-Allow-Headers',
-'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-);
-if (req.method === 'OPTIONS') {
-res.status(200).end();
-return;
-}
-return await fn(req, res);
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+  return await fn(req, res);
 };
 
-const handler = (req, res) => {
-res.setHeader("Content-Type", "application/json");
-const d = new Date();
-const response = {
-date: d.toString()
-};
-res.end(JSON.stringify(response));
-};
+const handler = allowCors(async (req, res) => {
+  const { startBlock, endBlock } = req.query;
+
+  try {
+    const result = await getTransfers(parseInt(startBlock), parseInt(endBlock));
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      error: error.toString()
+    });
+  }
+});
 
 module.exports = allowCors(handler);
 
