@@ -1,4 +1,4 @@
-const { ethers } = require("ethers");
+const { ethers, AlchemyProvider } = require("ethers");
 const express = require('express');
 const app = express();
 
@@ -37,7 +37,7 @@ const handler = allowCors(async (req, res) => {
 
 module.exports = allowCors(handler);
 
-const provider = new ethers.providers.AlchemyProvider("homestead", "iiDYJ0CAxQyqnDZqbtu7SvaX_hNzz6V5");
+const provider = new AlchemyProvider("homestead", "iiDYJ0CAxQyqnDZqbtu7SvaX_hNzz6V5");
 
 const contractAddress = "0xBd3531dA5CF5857e7CfAA92426877b022e612cf8";
 
@@ -46,23 +46,26 @@ const ABI = [{"inputs":[{"internalType":"string","name":"baseURI","type":"string
 const contract = new ethers.Contract(contractAddress, ABI, provider);
 
 async function getTransfers(startBlock, endBlock) {
-const transferEvent = contract.filters.Transfer(contractAddress);
-transferEvent.fromBlock = startBlock;
-transferEvent.toBlock = endBlock;
+  const transferEvent = contract.filters.Transfer(contractAddress);
+  transferEvent.fromBlock = startBlock;
+  transferEvent.toBlock = endBlock;
 
-const logs = await provider.getLogs(transferEvent);
+  const logs = await provider.getLogs(transferEvent);
 
-const transfers = {};
-if (logs.length > 0){logs.forEach(log => {
-if (log.topics[0] === "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef") {
-const from = "0x" + log.topics[1].substr(26);
-const to = "0x" + log.topics[2].substr(26);
-transfers[from] = transfers[from] ? transfers[from] + 1 : 1;
-  transfers[to] = transfers[to] ? transfers[to] + 1 : 1;
-} });
-}
+  const transfers = {};
+  debugger
+  if (logs.length > 0){
+    logs.forEach(log => {
+      if (log.topics[0] === "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef") {
+        const from = "0x" + log.topics[1].substr(26);
+        const to = "0x" + log.topics[2].substr(26);
+        transfers[from] = transfers[from] ? transfers[from] + 1 : 1;
+        transfers[to] = transfers[to] ? transfers[to] + 1 : 1;
+      } 
+    });
+  }
 
-return { transfers, startBlock, endBlock, success: true };
+  return { transfers, startBlock, endBlock, success: true };
 }
 
 /* app.get("/transfers/:startBlock/:endBlock", async (req, res) => {
