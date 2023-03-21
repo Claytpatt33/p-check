@@ -44,35 +44,26 @@ const ABI = [{"inputs":[{"internalType":"string","name":"baseURI","type":"string
 const contract = new ethers.Contract(contractAddress, ABI, provider);
 
 async function getTransfers(startBlock, endBlock) {
-  const transferEvent = contract.filters.Transfer(contractAddress);
+  const topic = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
 
-  
-  transferEvent.fromBlock = startBlock;
-  transferEvent.toBlock = endBlock;
-
-  // console.log(transferEvent.fromBlock)
-  // process.exit()
-  
-  // const logs = await provider.getLogs(transferEvent);
   const logs = await provider.getLogs({
     address: contractAddress,
     fromBlock: startBlock,
     toBlock: endBlock,
-    topics: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']
+    topics: [topic]
   });
 
   const transfers = {};
 
-  // console.log(logs)
-
   if (logs.length > 0){
-    logs.forEach(log => {
-      const from = "0x" + log.topics[1].substr(26);
-      const to = "0x" + log.topics[2].substr(26);
+    for (let i = 0; i < logs.length; i++) {
+      if (logs[i].topics[0] !==  topic) continue 
 
+      const tx = await provider.getTransaction(logs[i].transactionHash)
+      const from = tx.from
+      
       transfers[from] = transfers[from] ? transfers[from] + 1 : 1;
-      // transfers[to] = transfers[to] ? transfers[to] + 1 : 1;
-    });
+    }
   }
 
   return { transfers, startBlock, endBlock, success: true };
