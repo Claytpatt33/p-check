@@ -43,7 +43,7 @@ const Home = () => {
           Object.keys(transfers).map(address => (
             <div key={address}>
               Address: {address}
-              Number of Transfers: {transfers[address]} \n
+              Number of Transfers: {transfers[address]}
             </div>
           ))
         )}
